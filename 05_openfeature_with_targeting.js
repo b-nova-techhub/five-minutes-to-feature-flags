@@ -10,8 +10,10 @@ app.use((_, res, next) => {
   next();
 }, routes);
 
+// A: create the OpenFeature client
 const featureFlags = OpenFeature.getClient();
 
+// B: The FLAG_CONFIGURATION for the InMemoryProvider
 const FLAG_CONFIGURATION = {
   'with-cows': {
     variants: {
@@ -21,7 +23,7 @@ const FLAG_CONFIGURATION = {
     disabled: false,
     defaultVariant: "off",
     contextEvaluator: (context) => {
-      if (context.cow === "Bessie") {
+      if (context.user === "Tom") {
         return "on";
       }
       return "off";
@@ -29,19 +31,25 @@ const FLAG_CONFIGURATION = {
   }
 };
 
+// C: Initialize a Provider
 const featureFlagProvider = new InMemoryProvider(FLAG_CONFIGURATION);
 
+// D: Set the Provider onto the OpenFeature Client
 OpenFeature.setProvider(featureFlagProvider);
 
 routes.get("/", async (req, res) => {
+
+  // E: create the context to be sent to the provider
   const context = {
-    cow: req.get("x-cow")
+    user: req.get("x-user")
   };
+
+  // F: call the OpenFeature client at requesttime to evaluate the flag, with default value and the context
   const withCows = await featureFlags.getBooleanValue("with-cows", false, context);
   if (withCows) {
-    res.send(cowsay.say({ text: "Hello, world!" }));
+    res.send(cowsay.say({ text: "Hello, world from b-nova!" }));
   } else {
-    res.send("Hello, world!");
+    res.send("Hello, world from b-nova!");
   }
 });
 

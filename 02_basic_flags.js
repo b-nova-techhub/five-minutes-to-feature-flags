@@ -14,9 +14,9 @@ routes.get("/", async (_, res) => {
   // cow-based greeting system
   const withCow = false;
   if (withCow) {
-    res.send(cowsay.say({ text: "Hello, world!" }));
+    res.send(cowsay.say({ text: "Hello, world from b-nova!" }));
   } else {
-    res.send("Hello, world!");
+    res.send("Hello, world from b-nova!");
   }
 });
 

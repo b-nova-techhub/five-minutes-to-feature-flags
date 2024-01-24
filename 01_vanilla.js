@@ -9,7 +9,7 @@ app.use((_, res, next) => {
 }, routes);
 
 routes.get("/", async (_, res) => {
-  res.send("Hello, world!");
+  res.send("Hello, world from b-nova!");
 });
 
 app.listen(3333, () => {
